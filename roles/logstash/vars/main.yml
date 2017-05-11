@@ -1,0 +1,4 @@
+##Var ansible for logstash
+repo_logstash: deb https://artifacts.elastic.co/packages/5.x/apt stable main
+url_keylogstash: https://packages.elastic.co/GPG-KEY-elasticsearch
+elasticsearch_IP: "{{ ansible_eth0.ipv4.address }}:9200"

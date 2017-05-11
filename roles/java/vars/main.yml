@@ -1,0 +1,5 @@
+##Var ansible for base image
+repo_java: deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main
+keyserver_java: keyserver.ubuntu.com
+key_id: EEA14886
+

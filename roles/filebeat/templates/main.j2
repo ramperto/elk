@@ -1,0 +1,10 @@
+filebeat:
+  prospectors:
+    -
+      paths:
+        - {{ app_log }}
+      input_type: log
+
+output:
+  logstash:
+    hosts: ["{{ logstash_IP }}"]

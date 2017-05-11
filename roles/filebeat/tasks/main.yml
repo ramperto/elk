@@ -1,0 +1,12 @@
+##ansible task for installing Java 1.8 
+---
+- name: Download filebeat 
+  get_url: url={{ url_filebeat }}  dest=/opt
+
+- name: Install filebeat deb
+  apt: deb=/opt/filebeat_1.0.1_amd64.deb state=present
+
+- name: Add config logstash
+  template: src=main.j2 dest=/etc/filebeat/filebeat.yml
+  notify: 
+     - Restart filebeat

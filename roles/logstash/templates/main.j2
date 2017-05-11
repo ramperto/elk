@@ -1,0 +1,22 @@
+input {
+  beats {
+    port => 5044
+  }
+}
+
+filter {
+   grok {
+      # Do multiline matching with (?m) as the above mutliline filter may add n$
+      match => [ "message", "(?m)^%{TIME}%{SPACE}%{GREEDYDATA}" ]
+ }
+}
+
+output {
+  elasticsearch {
+    hosts => "{{ elasticsearch_IP }}"
+    sniffing => true
+    manage_template => false
+    index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+    document_type => "%{[@metadata][type]}"
+  }
+}

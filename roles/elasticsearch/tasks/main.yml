@@ -1,0 +1,61 @@
+##ansible task for installing Elasticsearch 2.1 
+---
+- name: get artifact for elasticsearch
+  get_url: 
+    url: "{{ url_elasticsearch }}{{ package_name }}" 
+    dest: /opt/
+
+- name: extract file to /etc 
+  unarchive: src=/opt/{{ package_name }} dest=/etc/ owner={{ user_elasticsearch }} group={{ user_elasticsearch }}  copy=no
+
+- name: Check if directory /etc/elasticsearch is exist
+  stat: path=/etc/elasticsearch
+  register: e_stat
+
+- name: Move directory /etc/elasticseatch
+  file: path=/etc/elasticsearch state=absent
+  when: e_stat.stat.exists
+
+- name: modify directory elasticsearch
+  command: mv /etc/{{ elasticsearch_dir }} /etc/elasticsearch 
+
+- name: modify directory elasticsearch
+  command: chown -R {{ user_elasticsearch }} /etc/elasticsearch/ 
+
+- name: modify directory elasticsearch
+  command: chgrp -R {{ user_elasticsearch }} /etc/elasticsearch/
+
+- name: add line to /etc/elasticsearch/config/elasticsearch.yml
+  blockinfile: 
+     dest: /etc/elasticsearch/config/elasticsearch.yml
+     insertbefore: BOF
+     block: |
+      index.mapper.dynamic: {{ index_map_dyn }}
+      network.host: {{ network_host }}
+- name: Create Log directory for elasticsearch
+  file: path=/var/log/elasticsearch state=directory owner={{ user_elasticsearch }} group={{ user_elasticsearch }} recurse=yes
+
+- name: Create Log file for elasticsearch
+  file: path=/var/log/elasticsearch/elasticsearch.log state=touch owner={{ user_elasticsearch }} group={{ user_elasticsearch }}
+
+- name: Copy Script elasticsearch to make as a service
+  copy: src=elasticsearch dest=/etc/init.d/ owner={{ user_elasticsearch }} group={{ user_elasticsearch }} mode=755
+
+- name: start elasticsearch service
+  sudo: no
+  command: nohup /etc/init.d/elasticsearch start 
+  register: elasticsearch_service
+
+- name: copy template index(filebeat.template.json) for elasticsearch
+  copy: src=filebeat.template.json dest=/home/{{ user_elasticsearch }}/
+
+- name: Wait for Elasticsearch to start
+  wait_for:
+    host=localhost
+    port=9200
+    delay=10
+    timeout=300
+ 
+- name: Create index filebeat-* on elasticsearch by using filebeat.template.json
+  command: "curl -XPUT 'http://localhost:9200/_template/filebeat?pretty' -d@/home/{{ user_elasticsearch }}/filebeat.template.json"
+  when: elasticsearch_service|changed

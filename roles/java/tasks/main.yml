@@ -1,0 +1,14 @@
+##ansible task for installing Java 1.8 
+---
+- name: add java key
+  apt_key: keyserver={{ keyserver_java }} id={{ key_id }}
+
+- name: create java repo list
+  copy: content={{ repo_java }} dest=/etc/apt/sources.list.d/java.list
+
+- name: Autoaccept license for Java
+  action: shell echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+
+- name: install Java
+  apt: name=oracle-java8-installer state=latest update_cache=yes
+

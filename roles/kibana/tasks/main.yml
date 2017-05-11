@@ -1,0 +1,48 @@
+##ansible task for installing kibana 4.3 
+---
+- name: get artifact for kibana
+  get_url: url={{ url_kibana }}{{ package_name }} dest=/opt/
+
+- name: extract file to /etc 
+  unarchive: src=/opt/{{ package_name }} dest=/etc/ owner={{ user_kibana }} group={{ user_kibana }}  copy=no
+
+- name: Check if directory /etc/kibana is exist
+  stat: path=/etc/kibana
+  register: k_stat
+
+- name: Move directory /etc/kibana
+  file: path=/etc/kibana state=absent
+  when: k_stat.stat.exists
+
+- name: modify directory kibana
+  command: mv /etc/{{ kibana_dir }} /etc/kibana 
+
+- name: modify directory kibana
+  command: chown -R {{ user_kibana }} /etc/kibana/ 
+
+- name: modify directory kibana
+  command: chgrp -R {{ user_kibana }} /etc/kibana/
+
+- name: add line to /etc/kibana/config/kibana.yml
+  blockinfile: 
+     dest: /etc/kibana/config/kibana.yml
+     insertbefore: EOF
+     block: |
+      server.port: 5601
+      server.host: "0.0.0.0"
+      elasticsearch.url: "http://{{ ansible_default_ipv4.address }}:9200"
+      elasticsearch.preserveHost: true
+      kibana.index: ".kibana"
+      kibana.defaultAppId: "discover"
+
+- name: Create Log file for kibana
+  file: path=/var/log/kibana.log state=touch owner={{ user_kibana }} group={{ user_kibana }}
+
+- name: Copy Script kibana to make as a service
+  copy: src=kibana dest=/etc/init.d/ owner={{ user_kibana }} group={{ user_kibana }} mode=755
+
+- name: start kibana service
+  sudo: no
+  command: nohup /etc/init.d/kibana start 
+
+ 

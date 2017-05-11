@@ -1,0 +1,15 @@
+---
+
+- name: elk
+  hosts: elk
+  become: yes
+  become_method: sudo
+  roles:
+#    - { role: java8 }
+#    - { role: ansible-role-java }
+#    - role: geerlingguy.java
+#    - role: elasticsearch    
+#    - role: nginx
+#    - role: kibana4
+    - role: filebeat 
+#    - role: logstash

@@ -1,0 +1,4 @@
+##Var ansible for base image
+url_filebeat: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.4.0-amd64.deb
+logstash_IP: "{{ ansible_eth0.ipv4.address }}:5044"
+app_log: /var/log/messages

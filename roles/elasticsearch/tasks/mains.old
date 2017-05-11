@@ -1,0 +1,4 @@
+- name: start elasticsearch service
+  sudo: no
+  command: nohup /etc/init.d/elasticsearch start
+
