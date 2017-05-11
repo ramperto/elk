@@ -1,5 +1,5 @@
 ##Var ansible for base image
-url_kibana: https://artifacts.elastic.co/downloads/kibana/kibana-5.4.0-linux-x86_64.tar.gz
+url_kibana: https://artifacts.elastic.co/downloads/kibana/
 package_name: kibana-5.4.0-linux-x86_64.tar.gz
 kibana_dir: kibana-5.4.0-linux-x86_64
-user_kibana: admin
+user_kibana: perto

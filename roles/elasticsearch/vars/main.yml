@@ -1,7 +1,15 @@
+
 ##Var ansible for base image
-url_elasticsearch: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.0.tar.gz
+#url_elasticsearch: https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.1.1/
+#package_name: elasticsearch-2.1.1.tar.gz
+#index_map_dyn: true
+#network_host: 0.0.0.0
+#elasticsearch_dir: elasticsearch-2.1.1
+#user_elasticsearch: perto
+
+url_elasticsearch: https://artifacts.elastic.co/downloads/elasticsearch/
 package_name: elasticsearch-5.4.0.tar.gz
 index_map_dyn: true
 network_host: 0.0.0.0
-elasticsearch_dir: elasticsearch-2.1.1
-user_elasticsearch: admin
+elasticsearch_dir: elasticsearch-5.4.0
+user_elasticsearch: perto

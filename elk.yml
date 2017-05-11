@@ -1,15 +1,15 @@
 ---
 
 - name: elk
-  hosts: medan
+  hosts: localhost
   become: yes
   become_method: sudo
   roles:
 #    - { role: java8 }
 #    - { role: ansible-role-java }
 #    - role: geerlingguy.java
-#    - role: elasticsearch    
+#   - role: elasticsearch    
 #    - role: nginx
-    - role: kibana
-#    - role: filebeat 
-#    - role: logstash
+#    - role: kibana
+    - role: filebeat 
+    - role: logstash
