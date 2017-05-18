@@ -13,3 +13,4 @@
 #    - role: kibana
     - role: filebeat 
     - role: logstash
+	auth_basic "Restricted";
